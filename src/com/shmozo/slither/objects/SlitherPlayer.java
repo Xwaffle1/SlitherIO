@@ -1,8 +1,14 @@
 package com.shmozo.slither.objects;
 
 import com.shmozo.slither.SlitherIO;
+import com.shmozo.slither.utils.BaseUtils;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
@@ -21,6 +27,8 @@ public class SlitherPlayer {
     private List<ArmorStand> followingArmorStands;
     private Scoreboard scoreboard;
     private byte color;
+    private World world;
+    private Player player;
 
     public SlitherPlayer(Player player) {
         this.uuid = player.getUniqueId();
@@ -28,8 +36,16 @@ public class SlitherPlayer {
         this.playerScore = 0;
         this.playerSize = 1;
         this.followingArmorStands = new ArrayList<>();
-        scoreboard = null;
-        color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
+        this.scoreboard = null;
+        this.color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
+        this.world = player.getWorld();
+        this.player = player;
+        ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getPlayer()), EntityType.ARMOR_STAND);
+        armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, getColor()));
+        armorStand.setVisible(false);
+        armorStand.setSmall(true);
+        getFollowingArmorStands().add(armorStand);
+        addFollowingArmorStand();
     }
 
     public int getPlayerSize() {
@@ -60,6 +76,14 @@ public class SlitherPlayer {
         return color;
     }
 
+    public World getWorld() {
+        return world;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
     public void addPlayerSize(int amount) {
         playerSize += amount;
     }
@@ -76,7 +100,11 @@ public class SlitherPlayer {
     }
 
     public void addFollowingArmorStand() {
-        //TODO: Create an armor stand template then add that.
+        ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getFollowingArmorStands().get(getFollowingArmorStands().size() - 1)), EntityType.ARMOR_STAND);
+        armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, getColor()));
+        armorStand.setVisible(false);
+        armorStand.setSmall(true);
+        getFollowingArmorStands().add(armorStand);
     }
 
     public void removeFollowingArmorStand() {
@@ -89,8 +117,11 @@ public class SlitherPlayer {
     public void killPlayer() {
         this.playerScore = 0;
         this.playerSize = 1;
-        color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
-        //TODO: Loop through armor stands, drop a clay block below them.
+        this.color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
+        for (ArmorStand armorStand : getFollowingArmorStands()) {
+            ItemStack itemStack = getWorld().dropItemNaturally(armorStand.getEyeLocation(), new ItemStack(Material.STAINED_CLAY, getColor())).getItemStack();
+            itemStack.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
+        }
         this.getFollowingArmorStands().clear();
     }
 }

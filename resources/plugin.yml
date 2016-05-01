@@ -1,0 +1,5 @@
+name: SlitherIO
+main: com.shmozo.slither.SlitherIO
+version: 1.0
+author: Shmozo Development Team
+commands:

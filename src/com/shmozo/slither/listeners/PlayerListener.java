@@ -1,8 +1,8 @@
 package com.shmozo.slither.listeners;
 
 import com.shmozo.slither.SlitherIO;
-import com.shmozo.slither.objects.SlitherPlayer;
 import com.shmozo.slither.utils.BaseUtils;
+import com.shmozo.slither.utils.Manager;
 import org.bukkit.GameMode;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.EventHandler;
@@ -35,22 +35,23 @@ public class PlayerListener implements Listener {
         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) return;
         if (event.getPlayer().getNearbyEntities(0.5, 0.5, 0.5).stream().anyMatch(ArmorStand.class::isInstance)) {
             //Player has collided with another player's tail and should be killed.
+            SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).killPlayer();
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void setupPlayerObject(PlayerJoinEvent event) {
-        SlitherIO.getInstance().getSlitherPlayers().put(event.getPlayer().getName(), new SlitherPlayer(event.getPlayer()));
+        Manager.loginTasks(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void cleanPlayerObjectQuit(PlayerQuitEvent event) {
-        SlitherIO.getInstance().getSlitherPlayers().remove(event.getPlayer().getName());
+        Manager.logoutTasks(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void cleanPlayerObjectKick(PlayerKickEvent event) {
-        SlitherIO.getInstance().getSlitherPlayers().remove(event.getPlayer().getName());
+        Manager.logoutTasks(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

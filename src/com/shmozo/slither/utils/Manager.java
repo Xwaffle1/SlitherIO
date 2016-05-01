@@ -1,8 +1,10 @@
 package com.shmozo.slither.utils;
 
 import com.shmozo.slither.SlitherIO;
+import com.shmozo.slither.objects.SlitherPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -34,5 +36,13 @@ public class Manager {
 
             player.setScoreboard(scoreboard);
         }), 200L, 15L);
+    }
+
+    public static void loginTasks(Player player) {
+        SlitherIO.getInstance().getSlitherPlayers().put(player.getName(), new SlitherPlayer(player));
+    }
+
+    public static void logoutTasks(Player player) {
+        SlitherIO.getInstance().getSlitherPlayers().remove(player.getName());
     }
 }

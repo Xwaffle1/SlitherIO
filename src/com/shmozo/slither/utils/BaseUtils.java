@@ -1,9 +1,12 @@
 package com.shmozo.slither.utils;
 
 import com.shmozo.slither.SlitherIO;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 /**
  * Created by Kieran Quigley (Proxying) on 01-May-16 for CherryIO.
@@ -24,5 +27,10 @@ public class BaseUtils {
             itemStack.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
         }
         return itemStack;
+    }
+
+    public static Location getBlockBehindEntity(Entity entity) {
+        Vector inverseDirectionVec = entity.getLocation().getDirection().normalize().multiply(-1);
+        return entity.getLocation().add(inverseDirectionVec);
     }
 }
