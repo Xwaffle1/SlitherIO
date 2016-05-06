@@ -37,9 +37,10 @@ public class PlayerListener implements Listener {
         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) return;
         if (event.getPlayer().getNearbyEntities(0.5, 0.5, 0.5).stream().anyMatch(ArmorStand.class::isInstance)) {
             ArmorStand stand = (ArmorStand) event.getPlayer().getNearbyEntities(0.5, 0.5, 0.5).stream().filter( e -> e instanceof ArmorStand).findFirst().get();
-            if (!SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).getFollowingArmorStands().contains(stand))
-            //Player has collided with another player's tail and should be killed.
-            SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).killPlayer();
+            if (!SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).getFollowingArmorStands().contains(stand)) {
+                //Player has collided with another player's tail and should be killed.
+                SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).killPlayer();
+            }
         }
     }
 
@@ -49,12 +50,10 @@ public class PlayerListener implements Listener {
         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) return;
         Location to = event.getTo();
         Location from = event.getFrom();
-        if (to.getBlock() == from.getBlock())
-            return;
+        if ((from.getBlockX() == to.getBlockX()) && (from.getBlockZ() == to.getBlockZ()) && (from.getBlockY() == to.getBlockY())) return;
         SlitherPlayer sPlayer = SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName());
         for (int i = (sPlayer.getFollowingArmorStands().size() - 1); i >= 0; i--) {
             ArmorStand stand = sPlayer.getFollowingArmorStands().get(i);
-            event.getPlayer().sendMessage("Updated " + i + " LOCATION");
             if (i == 0) {
                 stand.teleport(event.getFrom());
             } else {
@@ -65,6 +64,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void setupPlayerObject(PlayerJoinEvent event) {
+        event.getPlayer().setGameMode(GameMode.ADVENTURE);
         Manager.loginTasks(event.getPlayer());
     }
 

@@ -40,7 +40,7 @@ public class SlitherPlayer {
         this.color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
         this.world = player.getWorld();
         this.player = player;
-        ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getPlayer()).subtract(0, 0.5, 0), EntityType.ARMOR_STAND);
+        ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getPlayer()).subtract(0, 0.4, 0), EntityType.ARMOR_STAND);
         armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, getColor()));
         armorStand.setVisible(false);
         armorStand.setSmall(true);
@@ -118,11 +118,11 @@ public class SlitherPlayer {
     public void killPlayer() {
         this.playerScore = 0;
         this.playerSize = 1;
-        this.color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
         for (ArmorStand armorStand : getFollowingArmorStands()) {
             ItemStack itemStack = getWorld().dropItemNaturally(armorStand.getEyeLocation(), new ItemStack(Material.STAINED_CLAY, getColor())).getItemStack();
             itemStack.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
         }
+        this.color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
         this.getFollowingArmorStands().clear();
     }
 }
