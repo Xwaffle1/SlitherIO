@@ -2,6 +2,7 @@ package com.shmozo.slither.objects;
 
 import com.shmozo.slither.SlitherIO;
 import com.shmozo.slither.utils.BaseUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
@@ -9,6 +10,8 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
@@ -40,6 +43,7 @@ public class SlitherPlayer {
         this.color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
         this.world = player.getWorld();
         this.player = player;
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 2));
         ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getPlayer()).subtract(0, 0.4, 0), EntityType.ARMOR_STAND);
         armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
         armorStand.setVisible(false);
@@ -136,6 +140,7 @@ public class SlitherPlayer {
         for (ArmorStand armorStand : getFollowingArmorStands()) {
             ItemStack itemStack = getWorld().dropItemNaturally(armorStand.getEyeLocation(), new ItemStack(Material.STAINED_CLAY, 1, getColor())).getItemStack();
             itemStack.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
+            armorStand.remove();
         }
         this.color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
         this.getFollowingArmorStands().stream().forEach(ArmorStand::remove);
