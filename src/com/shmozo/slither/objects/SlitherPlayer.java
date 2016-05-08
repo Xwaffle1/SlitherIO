@@ -98,7 +98,7 @@ public class SlitherPlayer {
 
     public void addPlayerScore(int amount) {
         playerScore += amount;
-        if (playerScore % 10 == 0) {
+        if (playerScore % 20 == 0) {
             addFollowingArmorStand();
         }
     }

@@ -21,30 +21,18 @@ public class SlitherIO extends JavaPlugin {
 
     private Map<String, SlitherPlayer> slitherPlayers = new HashMap<>();
 
+    private String nmsVers;
+
     public void onEnable() {
         instance = this;
+
+        nmsVers = Bukkit.getServer().getClass().getPackage().getName();
+        nmsVers = nmsVers.substring(nmsVers.lastIndexOf(".") + 1);
 
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 
         Manager.updatePlayerScoreboards();
-
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getOnlinePlayers().stream().forEach(player -> {
-            SlitherPlayer sPlayer = SlitherIO.getInstance().getSlitherPlayers().get(player.getName());
-            if (sPlayer.isAlive()) {
-                if (player.isOnGround()) {
-                    if (player.isSneaking()) {
-                        if (sPlayer.getPlayerScore() > 25) {
-                            sPlayer.removePlayerScore(5);
-                            player.setVelocity(player.getLocation().getDirection().multiply(.5));
-                        } else {
-                            player.setVelocity(player.getLocation().getDirection().multiply(.3));
-                        }
-                    } else {
-                        player.setVelocity(player.getLocation().getDirection().multiply(.3));
-                    }
-                }
-            }
-        }), 0, 1);
+        Manager.handlePlayerMovement();
     }
 
     public void onDisable() {
@@ -61,5 +49,9 @@ public class SlitherIO extends JavaPlugin {
 
     public Random getRandom() {
         return random;
+    }
+
+    public String getNmsVers() {
+        return nmsVers;
     }
 }
