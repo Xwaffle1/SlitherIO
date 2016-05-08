@@ -33,9 +33,9 @@ public class SlitherIO extends JavaPlugin {
             if (sPlayer.isAlive()) {
                 if (player.isOnGround()) {
                     if (player.isSneaking()) {
-                        player.setVelocity(player.getLocation().getDirection().normalize().multiply(.5));
+                        player.setVelocity(player.getLocation().getDirection().multiply(.5));
                     } else {
-                        player.setVelocity(player.getLocation().getDirection().normalize().multiply(.3));
+                        player.setVelocity(player.getLocation().getDirection().multiply(.3));
                     }
                 }
             }

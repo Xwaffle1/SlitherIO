@@ -30,7 +30,7 @@ public class BaseUtils {
     }
 
     public static Location getBlockBehindEntity(Entity entity) {
-        Vector inverseDirectionVec = entity.getLocation().getDirection().normalize().multiply(-1);
+        Vector inverseDirectionVec = entity.getLocation().getDirection().multiply(-1);
         return entity.getLocation().add(inverseDirectionVec);
     }
 }

@@ -5,7 +5,6 @@ import com.shmozo.slither.objects.SlitherPlayer;
 import com.shmozo.slither.utils.BaseUtils;
 import com.shmozo.slither.utils.Manager;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -39,6 +38,7 @@ public class PlayerListener implements Listener {
         event.getItem().remove();
         if (BaseUtils.isSlitherFood(event.getItem().getItemStack())) {
             if (BaseUtils.isLargeFood(event.getItem().getItemStack())) {
+                //Add large food points
                 SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).addPlayerScore(25);
             } else {
                 SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).addPlayerScore(10);
@@ -63,10 +63,6 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) return;
-        Location to = event.getTo();
-        Location from = event.getFrom();
-        if ((from.getBlockX() == to.getBlockX()) && (from.getBlockZ() == to.getBlockZ()) && (from.getBlockY() == to.getBlockY()))
-            return;
         SlitherPlayer sPlayer = SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName());
         for (int i = (sPlayer.getFollowingArmorStands().size() - 1); i >= 0; i--) {
             ArmorStand stand = sPlayer.getFollowingArmorStands().get(i);

@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.util.EulerAngle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,11 +114,17 @@ public class SlitherPlayer {
     public void spawnSnake() {
         isAlive = true;
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 2));
-        ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getPlayer()).subtract(0, 0.4, 0), EntityType.ARMOR_STAND);
+        ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getPlayer()), EntityType.ARMOR_STAND);
         armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
         armorStand.setVisible(false);
         armorStand.setSmall(true);
+        armorStand.setBasePlate(false);
+        armorStand.setHeadPose(new EulerAngle(3.14, 3.14, 3.14));
         getFollowingArmorStands().add(armorStand);
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
         addFollowingArmorStand();
         addFollowingArmorStand();
         addFollowingArmorStand();
@@ -132,10 +139,12 @@ public class SlitherPlayer {
 
     public void addFollowingArmorStand() {
         if (!getFollowingArmorStands().isEmpty()) {
-            ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getFollowingArmorStands().get(getFollowingArmorStands().size() - 1)).subtract(0, 0.5, 0), EntityType.ARMOR_STAND);
+            ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getFollowingArmorStands().get(getFollowingArmorStands().size() - 1)), EntityType.ARMOR_STAND);
             armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
             armorStand.setVisible(false);
             armorStand.setSmall(true);
+            armorStand.setBasePlate(false);
+            armorStand.setHeadPose(new EulerAngle(3.14, 3.14, 3.14));
             getFollowingArmorStands().add(armorStand);
             addPlayerSize(1);
         }
