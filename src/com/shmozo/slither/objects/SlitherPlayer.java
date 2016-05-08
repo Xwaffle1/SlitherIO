@@ -99,7 +99,6 @@ public class SlitherPlayer {
     public void addPlayerScore(int amount) {
         playerScore += amount;
         if (playerScore % 10 == 0) {
-            getPlayer().sendMessage("Bigger");
             addFollowingArmorStand();
         }
     }
@@ -112,10 +111,8 @@ public class SlitherPlayer {
         playerScore -= amount;
         if (playerScore % 20 == 0) {
             removeFollowingArmorStand();
-            getPlayer().sendMessage("Smaller");
         } else if (playerScore % 10 == 0) {
             getWorld().dropItem(getFollowingArmorStands().get(getFollowingArmorStands().size() - 1).getEyeLocation(), new ItemStack(Material.STAINED_CLAY, 1, getColor())).getItemStack();
-            getPlayer().sendMessage("Lose Mass");
         }
     }
 
