@@ -41,10 +41,19 @@ public class SlitherPlayer {
         this.world = player.getWorld();
         this.player = player;
         ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getPlayer()).subtract(0, 0.4, 0), EntityType.ARMOR_STAND);
-        armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, getColor()));
+        armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
         armorStand.setVisible(false);
         armorStand.setSmall(true);
         getFollowingArmorStands().add(armorStand);
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
         addFollowingArmorStand();
     }
 
@@ -90,6 +99,9 @@ public class SlitherPlayer {
 
     public void addPlayerScore(int amount) {
         playerScore += amount;
+        if (playerScore % 50 == 0) {
+            addFollowingArmorStand();
+        }
     }
 
     public void removePlayerSize(int amount) {
@@ -101,11 +113,14 @@ public class SlitherPlayer {
     }
 
     public void addFollowingArmorStand() {
-        ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getFollowingArmorStands().get(getFollowingArmorStands().size() - 1)).subtract(0, 0.5, 0), EntityType.ARMOR_STAND);
-        armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, getColor()));
-        armorStand.setVisible(false);
-        armorStand.setSmall(true);
-        getFollowingArmorStands().add(armorStand);
+        if (!getFollowingArmorStands().isEmpty()) {
+            ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getFollowingArmorStands().get(getFollowingArmorStands().size() - 1)).subtract(0, 0.5, 0), EntityType.ARMOR_STAND);
+            armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
+            armorStand.setVisible(false);
+            armorStand.setSmall(true);
+            getFollowingArmorStands().add(armorStand);
+            addPlayerSize(1);
+        }
     }
 
     public void removeFollowingArmorStand() {
@@ -119,10 +134,11 @@ public class SlitherPlayer {
         this.playerScore = 0;
         this.playerSize = 1;
         for (ArmorStand armorStand : getFollowingArmorStands()) {
-            ItemStack itemStack = getWorld().dropItemNaturally(armorStand.getEyeLocation(), new ItemStack(Material.STAINED_CLAY, getColor())).getItemStack();
+            ItemStack itemStack = getWorld().dropItemNaturally(armorStand.getEyeLocation(), new ItemStack(Material.STAINED_CLAY, 1, getColor())).getItemStack();
             itemStack.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
         }
         this.color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
+        this.getFollowingArmorStands().stream().forEach(ArmorStand::remove);
         this.getFollowingArmorStands().clear();
     }
 }

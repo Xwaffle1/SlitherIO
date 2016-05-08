@@ -22,7 +22,7 @@ public class BaseUtils {
     }
 
     public static ItemStack createRandomSlitherFood() {
-        ItemStack itemStack = new ItemStack(Material.STAINED_CLAY, (byte) SlitherIO.getInstance().getRandom().nextInt(15));
+        ItemStack itemStack = new ItemStack(Material.STAINED_CLAY, 1, (byte) SlitherIO.getInstance().getRandom().nextInt(15));
         if (SlitherIO.getInstance().getRandom().nextFloat() >= 0.75) {
             itemStack.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
         }
