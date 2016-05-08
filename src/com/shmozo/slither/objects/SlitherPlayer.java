@@ -42,22 +42,7 @@ public class SlitherPlayer {
         this.color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
         this.world = player.getWorld();
         this.player = player;
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 2));
-        ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getPlayer()).subtract(0, 0.4, 0), EntityType.ARMOR_STAND);
-        armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
-        armorStand.setVisible(false);
-        armorStand.setSmall(true);
-        getFollowingArmorStands().add(armorStand);
-        addFollowingArmorStand();
-        addFollowingArmorStand();
-        addFollowingArmorStand();
-        addFollowingArmorStand();
-        addFollowingArmorStand();
-        addFollowingArmorStand();
-        addFollowingArmorStand();
-        addFollowingArmorStand();
-        addFollowingArmorStand();
-        addFollowingArmorStand();
+        spawnSnake();
     }
 
     public int getPlayerSize() {
@@ -113,6 +98,25 @@ public class SlitherPlayer {
 
     public void removePlayerScore(int amount) {
         playerScore -= amount;
+    }
+
+    public void spawnSnake() {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 2));
+        ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getPlayer()).subtract(0, 0.4, 0), EntityType.ARMOR_STAND);
+        armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
+        armorStand.setVisible(false);
+        armorStand.setSmall(true);
+        getFollowingArmorStands().add(armorStand);
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
+        addFollowingArmorStand();
     }
 
     public void addFollowingArmorStand() {
