@@ -2,7 +2,6 @@ package com.shmozo.slither.objects;
 
 import com.shmozo.slither.SlitherIO;
 import com.shmozo.slither.utils.BaseUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
@@ -143,7 +142,6 @@ public class SlitherPlayer {
             armorStand.remove();
         }
         this.color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
-        this.getFollowingArmorStands().stream().forEach(ArmorStand::remove);
         this.getFollowingArmorStands().clear();
     }
 }
