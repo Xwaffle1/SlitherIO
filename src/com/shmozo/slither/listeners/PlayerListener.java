@@ -34,8 +34,8 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerEatItem(PlayerPickupItemEvent event) {
         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) return;
-        if (!SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).isAlive()) return;
         event.setCancelled(true);
+        if (!SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).isAlive()) return;
         event.getItem().remove();
         if (BaseUtils.isSlitherFood(event.getItem().getItemStack())) {
             if (BaseUtils.isLargeFood(event.getItem().getItemStack())) {
