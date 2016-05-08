@@ -32,6 +32,16 @@ public class SlitherPlayer {
     private World world;
     private Player player;
 
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+
+    private boolean isAlive;
+
     public SlitherPlayer(Player player) {
         this.uuid = player.getUniqueId();
         this.playerName = player.getName();
@@ -101,6 +111,7 @@ public class SlitherPlayer {
     }
 
     public void spawnSnake() {
+        isAlive = true;
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 2));
         ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getPlayer()).subtract(0, 0.4, 0), EntityType.ARMOR_STAND);
         armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
@@ -138,6 +149,7 @@ public class SlitherPlayer {
     }
 
     public void killPlayer() {
+        isAlive = false;
         this.playerScore = 0;
         this.playerSize = 1;
         for (ArmorStand armorStand : getFollowingArmorStands()) {

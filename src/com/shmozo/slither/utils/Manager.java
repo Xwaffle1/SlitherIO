@@ -4,6 +4,7 @@ import com.shmozo.slither.SlitherIO;
 import com.shmozo.slither.objects.SlitherPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -43,6 +44,7 @@ public class Manager {
     }
 
     public static void logoutTasks(Player player) {
+        SlitherIO.getInstance().getSlitherPlayers().get(player.getName()).getFollowingArmorStands().stream().forEach(ArmorStand::remove);
         SlitherIO.getInstance().getSlitherPlayers().remove(player.getName());
     }
 }
