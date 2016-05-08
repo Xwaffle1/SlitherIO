@@ -34,14 +34,15 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerEatItem(PlayerPickupItemEvent event) {
         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) return;
+        if (!SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).isAlive()) return;
         event.setCancelled(true);
         event.getItem().remove();
         if (BaseUtils.isSlitherFood(event.getItem().getItemStack())) {
             if (BaseUtils.isLargeFood(event.getItem().getItemStack())) {
                 //Add large food points
-                SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).addPlayerScore(25);
-            } else {
                 SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).addPlayerScore(10);
+            } else {
+                SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).addPlayerScore(5);
                 //Add small food points
             }
         }
@@ -50,6 +51,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCollideArmorStand(PlayerMoveEvent event) {
         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) return;
+        if (!SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).isAlive()) return;
         if (event.getPlayer().getNearbyEntities(0.5, 0.5, 0.5).stream().anyMatch(ArmorStand.class::isInstance)) {
             ArmorStand stand = (ArmorStand) event.getPlayer().getNearbyEntities(0.5, 0.5, 0.5).stream().filter(e -> e instanceof ArmorStand).findFirst().get();
             if (!SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).getFollowingArmorStands().contains(stand)) {
@@ -63,6 +65,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) return;
+        if (!SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).isAlive()) return;
         SlitherPlayer sPlayer = SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName());
         for (int i = (sPlayer.getFollowingArmorStands().size() - 1); i >= 0; i--) {
             ArmorStand stand = sPlayer.getFollowingArmorStands().get(i);
