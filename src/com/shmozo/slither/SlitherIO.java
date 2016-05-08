@@ -27,6 +27,19 @@ public class SlitherIO extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 
         Manager.updatePlayerScoreboards();
+
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getOnlinePlayers().stream().forEach(player -> {
+            SlitherPlayer sPlayer = SlitherIO.getInstance().getSlitherPlayers().get(player.getName());
+            if (sPlayer.isAlive()) {
+                if (player.isOnGround()) {
+                    if (player.isSneaking()) {
+                        player.setVelocity(player.getLocation().getDirection().normalize().multiply(.6));
+                    } else {
+                        player.setVelocity(player.getLocation().getDirection().normalize().multiply(.3));
+                    }
+                }
+            }
+        }), 0, 1);
     }
 
     public void onDisable() {

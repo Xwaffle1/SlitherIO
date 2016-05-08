@@ -19,9 +19,22 @@ import org.bukkit.event.player.*;
 public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
+    public void onSprintToggle(PlayerToggleSprintEvent event) {
+        event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onInteract(PlayerInteractAtEntityEvent event) {
+        if (event.getRightClicked() != null && event.getRightClicked() instanceof ArmorStand) {
+            if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerEatItem(PlayerPickupItemEvent event) {
         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) return;
-        if (!SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).isAlive()) return;
         event.setCancelled(true);
         event.getItem().remove();
         if (BaseUtils.isSlitherFood(event.getItem().getItemStack())) {
@@ -37,9 +50,8 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCollideArmorStand(PlayerMoveEvent event) {
         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) return;
-        if (!SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).isAlive()) return;
         if (event.getPlayer().getNearbyEntities(0.5, 0.5, 0.5).stream().anyMatch(ArmorStand.class::isInstance)) {
-            ArmorStand stand = (ArmorStand) event.getPlayer().getNearbyEntities(0.5, 0.5, 0.5).stream().filter( e -> e instanceof ArmorStand).findFirst().get();
+            ArmorStand stand = (ArmorStand) event.getPlayer().getNearbyEntities(0.5, 0.5, 0.5).stream().filter(e -> e instanceof ArmorStand).findFirst().get();
             if (!SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).getFollowingArmorStands().contains(stand)) {
                 //Player has collided with another player's tail and should be killed.
                 SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).killPlayer();
@@ -51,10 +63,10 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) return;
-        if (!SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).isAlive()) return;
         Location to = event.getTo();
         Location from = event.getFrom();
-        if ((from.getBlockX() == to.getBlockX()) && (from.getBlockZ() == to.getBlockZ()) && (from.getBlockY() == to.getBlockY())) return;
+        if ((from.getBlockX() == to.getBlockX()) && (from.getBlockZ() == to.getBlockZ()) && (from.getBlockY() == to.getBlockY()))
+            return;
         SlitherPlayer sPlayer = SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName());
         for (int i = (sPlayer.getFollowingArmorStands().size() - 1); i >= 0; i--) {
             ArmorStand stand = sPlayer.getFollowingArmorStands().get(i);
