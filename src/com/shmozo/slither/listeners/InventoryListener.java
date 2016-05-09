@@ -16,6 +16,7 @@ public class InventoryListener implements Listener {
         if (event.getInventory().getTitle().equalsIgnoreCase("Menu")) {
             event.setCancelled(true);
             if (event.getRawSlot() == 3) {
+                event.getWhoClicked().teleport(event.getWhoClicked().getWorld().getSpawnLocation());
                 SlitherIO.getInstance().getSlitherPlayers().get(event.getWhoClicked().getName()).spawnSnake();
                 event.getWhoClicked().closeInventory();
             } else if (event.getRawSlot() == 5) {

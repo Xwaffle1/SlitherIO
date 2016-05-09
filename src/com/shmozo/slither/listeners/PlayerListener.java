@@ -53,8 +53,8 @@ public class PlayerListener implements Listener {
     public void onPlayerCollideArmorStand(PlayerMoveEvent event) {
         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) return;
         if (!SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).isAlive()) return;
-        if (event.getPlayer().getNearbyEntities(0.5, 0.5, 0.5).stream().anyMatch(ArmorStand.class::isInstance)) {
-            ArmorStand stand = (ArmorStand) event.getPlayer().getNearbyEntities(0.75, 0.75, 0.75).stream().filter(e -> e instanceof ArmorStand).findFirst().get();
+        if (event.getPlayer().getNearbyEntities(0.75, 1, 0.75).stream().anyMatch(ArmorStand.class::isInstance)) {
+            ArmorStand stand = (ArmorStand) event.getPlayer().getNearbyEntities(0.75, 1, 0.75).stream().filter(e -> e instanceof ArmorStand).findFirst().get();
             if (!SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).getFollowingArmorStands().contains(stand)) {
                 //Player has collided with another player's tail and should be killed.
                 SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).killPlayer();
@@ -85,6 +85,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void setupPlayerObject(PlayerJoinEvent event) {
         event.getPlayer().setGameMode(GameMode.ADVENTURE);
+        event.getPlayer().teleport(event.getPlayer().getWorld().getSpawnLocation());
         Manager.loginTasks(event.getPlayer());
     }
 

@@ -158,7 +158,7 @@ public class SlitherPlayer {
     public void eatSmallFood() {
         addPlayerScore(20);
         smallFoods++;
-        if (smallFoods % 5 == 0) {
+        if (smallFoods % 7 == 0) {
             addFollowingArmorStand();
         }
     }
@@ -166,7 +166,7 @@ public class SlitherPlayer {
     public void eatLargeFood() {
         addPlayerScore(50);
         largeFoods++;
-        if (largeFoods % 2 == 0) {
+        if (largeFoods % 3 == 0) {
             addFollowingArmorStand();
         }
     }
@@ -186,26 +186,24 @@ public class SlitherPlayer {
         /**
          *  SNAKE HEAD
          */
-        ArmorStand headStand = getWorld().spawn(BaseUtils.getBlockBehindLocation(getPlayer().getLocation().subtract(0, 1.1, 0)), ArmorStand.class);
+        ArmorStand headStand = getWorld().spawn(BaseUtils.getBlockBehindLocation(getPlayer().getEyeLocation().subtract(0, 1.5, 0)), ArmorStand.class);
         headStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
         headStand.setVisible(false);
         headStand.setBasePlate(false);
         headStand.setHeadPose(new EulerAngle(3.14, 3.14, 3.14));
         headStand.setGravity(false);
-        headStand.setMarker(true);
         headY = headStand.getLocation().getY();
         getFollowingArmorStands().add(headStand);
         /**
          *  SNAKE HEAD
          */
 
-        ArmorStand armorStand = getWorld().spawn(BaseUtils.getBlockBehindLocation(getPlayer().getLocation().subtract(0, 0.75, 0)), ArmorStand.class);
+        ArmorStand armorStand = getWorld().spawn(BaseUtils.getBlockBehindLocation(getPlayer().getEyeLocation().subtract(0, 1, 0)), ArmorStand.class);
         armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
         armorStand.setVisible(false);
         armorStand.setSmall(true);
         armorStand.setBasePlate(false);
         armorStand.setGravity(false);
-        armorStand.setMarker(true);
         armorStand.setHeadPose(new EulerAngle(3.14, 3.14, 3.14));
         bodyY = armorStand.getLocation().getY();
         getFollowingArmorStands().add(armorStand);
@@ -235,7 +233,6 @@ public class SlitherPlayer {
             armorStand.setSmall(true);
             armorStand.setBasePlate(false);
             armorStand.setGravity(false);
-            armorStand.setMarker(true);
             armorStand.setHeadPose(new EulerAngle(3.14, 3.14, 3.14));
             getFollowingArmorStands().add(armorStand);
             addPlayerSize(1);
@@ -258,7 +255,7 @@ public class SlitherPlayer {
 
     public void killPlayer() {
         isAlive = false;
-        this.playerScore = 0;
+        this.playerScore = 100;
         this.playerSize = 1;
         this.smallFoods = 0;
         this.largeFoods = 0;
