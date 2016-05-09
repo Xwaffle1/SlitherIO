@@ -71,9 +71,7 @@ public class PlayerListener implements Listener {
         for (int i = (sPlayer.getFollowingArmorStands().size() - 1); i >= 0; i--) {
             ArmorStand stand = sPlayer.getFollowingArmorStands().get(i);
             if (i == 0) {
-                Location loc = event.getPlayer().getLocation().clone();
-                loc.setY(event.getPlayer().getEyeLocation().getY());
-                stand.teleport(loc);
+                stand.teleport(event.getTo().clone().subtract(0, 0.5, 0));
             } else {
                 Location loc = sPlayer.getFollowingArmorStands().get((i - 1)).getLocation().clone();
                 loc.setY(event.getPlayer().getLocation().getY());

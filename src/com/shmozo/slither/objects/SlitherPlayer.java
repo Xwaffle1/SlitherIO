@@ -2,6 +2,7 @@ package com.shmozo.slither.objects;
 
 import com.shmozo.slither.SlitherIO;
 import com.shmozo.slither.utils.BaseUtils;
+import com.shmozo.slither.utils.Manager;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -245,5 +246,6 @@ public class SlitherPlayer {
         }
         this.color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
         this.getFollowingArmorStands().clear();
+        Manager.openMenu(getPlayer());
     }
 }

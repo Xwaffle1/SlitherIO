@@ -4,8 +4,11 @@ import com.shmozo.slither.SlitherIO;
 import com.shmozo.slither.objects.SlitherPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -67,6 +70,13 @@ public class Manager {
                 }
             }
         }), 0, 1);
+    }
+
+    public static void openMenu(Player player){
+        Inventory inv = Bukkit.createInventory(null, 9, "Restart?");
+        inv.setItem(3, new ItemBuilder().setItem(Material.STAINED_GLASS_PANE, DyeColor.LIME.getDyeData(), "Yes", new String[]{}).build());
+        inv.setItem(5, new ItemBuilder().setItem(Material.STAINED_GLASS_PANE, DyeColor.RED.getDyeData(), "No", new String[]{}).build());
+        player.openInventory(inv);
     }
 
     public static void loginTasks(Player player) {
