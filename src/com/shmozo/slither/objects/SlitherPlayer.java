@@ -47,7 +47,7 @@ public class SlitherPlayer {
     public SlitherPlayer(Player player) {
         this.uuid = player.getUniqueId();
         this.playerName = player.getName();
-        this.playerScore = 0;
+        this.playerScore = 100;
         this.playerSize = 1;
         this.followingArmorStands = new ArrayList<>();
         this.scoreboard = null;
@@ -99,7 +99,7 @@ public class SlitherPlayer {
 
     public void addPlayerScore(int amount) {
         playerScore += amount;
-        if (playerScore % 50 == 0) {
+        if (playerScore % 20 == 0) {
             addFollowingArmorStand();
         }
     }
@@ -110,6 +110,11 @@ public class SlitherPlayer {
 
     public void removePlayerScore(int amount) {
         playerScore -= amount;
+        if (playerScore % 20 == 0) {
+            removeFollowingArmorStand();
+        } else if (playerScore % 10 == 0) {
+            getWorld().dropItem(getFollowingArmorStands().get(getFollowingArmorStands().size() - 1).getEyeLocation(), new ItemStack(Material.STAINED_CLAY, 1, getColor())).getItemStack();
+        }
     }
 
     public void spawnSnake() {  
@@ -170,6 +175,13 @@ public class SlitherPlayer {
     }
 
     public void removeFollowingArmorStand() {
+        if (!getFollowingArmorStands().isEmpty()) {
+            ArmorStand armorStand =  getFollowingArmorStands().get(getFollowingArmorStands().size() - 1);
+            getWorld().dropItem(armorStand.getEyeLocation(), new ItemStack(Material.STAINED_CLAY, 1, getColor())).getItemStack();
+            getFollowingArmorStands().remove(armorStand);
+            armorStand.remove();
+            removePlayerSize(1);
+        }
     }
 
     public void setScoreboard(Scoreboard scoreboard) {
@@ -181,7 +193,7 @@ public class SlitherPlayer {
         this.playerScore = 0;
         this.playerSize = 1;
         for (ArmorStand armorStand : getFollowingArmorStands()) {
-            ItemStack itemStack = getWorld().dropItemNaturally(armorStand.getEyeLocation(), new ItemStack(Material.STAINED_CLAY, 1, getColor())).getItemStack();
+            ItemStack itemStack = getWorld().dropItem(armorStand.getEyeLocation(), new ItemStack(Material.STAINED_CLAY, 1, getColor())).getItemStack();
             itemStack.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
             armorStand.remove();
         }

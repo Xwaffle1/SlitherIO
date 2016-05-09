@@ -23,9 +23,12 @@ public class SlitherIO extends JavaPlugin {
     private Map<String, SlitherPlayer> slitherPlayers = new HashMap<>();
     private Map<String, ArmorStand> heads = new HashMap<>();
 
+    String nmsVers;
+
     public void onEnable() {
         instance = this;
-
+        nmsVers = Bukkit.getServer().getClass().getPackage().getName();
+        nmsVers = nmsVers.substring(nmsVers.lastIndexOf(".") + 1);
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 
         Manager.updatePlayerScoreboards();
@@ -59,4 +62,6 @@ public class SlitherIO extends JavaPlugin {
     public Random getRandom() {
         return random;
     }
+
+    public String getNmsVers(){ return nmsVers; }
 }
