@@ -7,7 +7,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -169,18 +168,18 @@ public class SlitherPlayer {
          */
         Location loc = player.getLocation().clone();
         loc.setY(player.getEyeLocation().getY());
-        ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(loc, EntityType.ARMOR_STAND);
-        armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
-        armorStand.setVisible(false);
-        armorStand.setBasePlate(false);
-        armorStand.setHeadPose(new EulerAngle(3.14, 3.14, 3.14));
-        armorStand.setMarker(true);
-        getFollowingArmorStands().add(armorStand);
+        ArmorStand headStand = getWorld().spawn(BaseUtils.getBlockBehindEntity(getPlayer()), ArmorStand.class);
+        headStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
+        headStand.setVisible(false);
+        headStand.setBasePlate(false);
+        headStand.setHeadPose(new EulerAngle(3.14, 3.14, 3.14));
+        headStand.setMarker(true);
+        getFollowingArmorStands().add(headStand);
         /**
          *  SNAKE HEAD
          */
 
-        armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getPlayer()), EntityType.ARMOR_STAND);
+        ArmorStand armorStand = getWorld().spawn(BaseUtils.getBlockBehindEntity(getPlayer()), ArmorStand.class);
         armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
         armorStand.setVisible(false);
         armorStand.setSmall(true);
@@ -206,7 +205,7 @@ public class SlitherPlayer {
 
     public void addFollowingArmorStand() {
         if (!getFollowingArmorStands().isEmpty()) {
-            ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getFollowingArmorStands().get(getFollowingArmorStands().size() - 1)), EntityType.ARMOR_STAND);
+            ArmorStand armorStand = getWorld().spawn(BaseUtils.getBlockBehindEntity(getFollowingArmorStands().get(getFollowingArmorStands().size() - 1)), ArmorStand.class);
             armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
             armorStand.setVisible(false);
             armorStand.setSmall(true);
