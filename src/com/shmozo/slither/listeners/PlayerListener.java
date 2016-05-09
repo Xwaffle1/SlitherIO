@@ -5,6 +5,7 @@ import com.shmozo.slither.objects.SlitherPlayer;
 import com.shmozo.slither.utils.BaseUtils;
 import com.shmozo.slither.utils.Manager;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -70,9 +71,13 @@ public class PlayerListener implements Listener {
         for (int i = (sPlayer.getFollowingArmorStands().size() - 1); i >= 0; i--) {
             ArmorStand stand = sPlayer.getFollowingArmorStands().get(i);
             if (i == 0) {
-                stand.teleport(event.getFrom());
+                Location loc = event.getPlayer().getLocation().clone();
+                loc.setY(event.getPlayer().getEyeLocation().getY());
+                stand.teleport(loc);
             } else {
-                stand.teleport(sPlayer.getFollowingArmorStands().get((i - 1)).getLocation());
+                Location loc = sPlayer.getFollowingArmorStands().get((i - 1)).getLocation().clone();
+                loc.setY(event.getPlayer().getLocation().getY());
+                stand.teleport(loc);
             }
         }
     }
