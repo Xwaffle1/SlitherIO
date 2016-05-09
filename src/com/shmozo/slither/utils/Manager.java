@@ -57,12 +57,14 @@ public class Manager {
                 if (player.isOnGround()) {
                     if (player.isSneaking()) {
                         if (sPlayer.getPlayerScore() > 25) {
-                            sPlayer.removePlayerScore(5);
+                            sPlayer.boost();
                             player.setVelocity(player.getLocation().getDirection().multiply(.5));
                         } else {
+                            sPlayer.disableBoostColors();
                             player.setVelocity(player.getLocation().getDirection().multiply(.3));
                         }
                     } else {
+                        sPlayer.disableBoostColors();
                         player.setVelocity(player.getLocation().getDirection().multiply(.3));
                     }
                 }

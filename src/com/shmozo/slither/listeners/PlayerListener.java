@@ -41,9 +41,9 @@ public class PlayerListener implements Listener {
         if (BaseUtils.isSlitherFood(event.getItem().getItemStack())) {
             if (BaseUtils.isLargeFood(event.getItem().getItemStack())) {
                 //Add large food points
-                SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).addPlayerScore(10);
+                SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).eatLargeFood();
             } else {
-                SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).addPlayerScore(5);
+                SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).eatSmallFood();
                 //Add small food points
             }
         }

@@ -8,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -34,6 +33,10 @@ public class SlitherPlayer {
     private byte color;
     private World world;
     private Player player;
+    private int smallFoods;
+    private int largeFoods;
+    private int boostCount;
+    private boolean boostColors;
 
     public boolean isAlive() {
         return isAlive;
@@ -55,6 +58,10 @@ public class SlitherPlayer {
         this.color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
         this.world = player.getWorld();
         this.player = player;
+        this.smallFoods = 0;
+        this.largeFoods = 0;
+        this.boostCount = 0;
+        this.boostColors = false;
         spawnSnake();
     }
 
@@ -100,9 +107,6 @@ public class SlitherPlayer {
 
     public void addPlayerScore(int amount) {
         playerScore += amount;
-        if (playerScore % 20 == 0) {
-            addFollowingArmorStand();
-        }
     }
 
     public void removePlayerSize(int amount) {
@@ -111,10 +115,48 @@ public class SlitherPlayer {
 
     public void removePlayerScore(int amount) {
         playerScore -= amount;
-        if (playerScore % 20 == 0) {
-            removeFollowingArmorStand();
-        } else if (playerScore % 10 == 0) {
+    }
+
+    public void boost() {
+        removePlayerScore(5);
+        boostCount++;
+        enableBoostColors();
+        if (boostCount % 4 == 0) {
             getWorld().dropItem(getFollowingArmorStands().get(getFollowingArmorStands().size() - 1).getEyeLocation(), new ItemStack(Material.STAINED_CLAY, 1, getColor())).getItemStack();
+        } else if (boostCount % 10 == 0) {
+            removeFollowingArmorStand();
+        }
+    }
+
+    public void enableBoostColors() {
+        if (!boostColors) {
+            ItemStack helmet = (new ItemStack(Material.STAINED_CLAY, 1, getColor()));
+            helmet.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
+            getFollowingArmorStands().stream().forEach(armorStand -> armorStand.setHelmet(helmet));
+            boostColors = true;
+        }
+    }
+
+    public void disableBoostColors() {
+        if (boostColors) {
+            ItemStack helmet = (new ItemStack(Material.STAINED_CLAY, 1, getColor()));
+            getFollowingArmorStands().stream().forEach(armorStand -> armorStand.setHelmet(helmet));
+            boostColors = false;
+        }
+    }
+    public void eatSmallFood() {
+        addPlayerScore(20);
+        smallFoods++;
+        if (smallFoods % 5 == 0) {
+            addFollowingArmorStand();
+        }
+    }
+
+    public void eatLargeFood() {
+        addPlayerScore(50);
+        largeFoods++;
+        if (largeFoods % 2 == 0) {
+            addFollowingArmorStand();
         }
     }
 
@@ -127,20 +169,22 @@ public class SlitherPlayer {
          */
         Location loc = player.getLocation().clone();
         loc.setY(player.getEyeLocation().getY());
-        ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(loc, EntityType.ARMOR_STAND);
-        armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
-        armorStand.setVisible(false);
-        armorStand.setBasePlate(false);
-        armorStand.setHeadPose(new EulerAngle(3.14, 3.14, 3.14));
-        getFollowingArmorStands().add(armorStand);
+        ArmorStand headStand = getWorld().spawn(BaseUtils.getBlockBehindEntity(getPlayer()), ArmorStand.class);
+        headStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
+        headStand.setVisible(false);
+        headStand.setBasePlate(false);
+        headStand.setHeadPose(new EulerAngle(3.14, 3.14, 3.14));
+        headStand.setMarker(true);
+        getFollowingArmorStands().add(headStand);
         /**
          *  SNAKE HEAD
          */
 
-        armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getPlayer()), EntityType.ARMOR_STAND);
+        ArmorStand armorStand = getWorld().spawn(BaseUtils.getBlockBehindEntity(getPlayer()), ArmorStand.class);
         armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
         armorStand.setVisible(false);
         armorStand.setSmall(true);
+        armorStand.setMarker(true);
         armorStand.setBasePlate(false);
         armorStand.setHeadPose(new EulerAngle(3.14, 3.14, 3.14));
         getFollowingArmorStands().add(armorStand);
@@ -162,7 +206,7 @@ public class SlitherPlayer {
 
     public void addFollowingArmorStand() {
         if (!getFollowingArmorStands().isEmpty()) {
-            ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getFollowingArmorStands().get(getFollowingArmorStands().size() - 1)), EntityType.ARMOR_STAND);
+            ArmorStand armorStand = getWorld().spawn(BaseUtils.getBlockBehindEntity(getFollowingArmorStands().get(getFollowingArmorStands().size() - 1)), ArmorStand.class);
             armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
             armorStand.setVisible(false);
             armorStand.setSmall(true);
@@ -191,6 +235,9 @@ public class SlitherPlayer {
         isAlive = false;
         this.playerScore = 0;
         this.playerSize = 1;
+        this.smallFoods = 0;
+        this.largeFoods = 0;
+        this.boostCount = 0;
         for (ArmorStand armorStand : getFollowingArmorStands()) {
             ItemStack itemStack = getWorld().dropItem(armorStand.getEyeLocation(), new ItemStack(Material.STAINED_CLAY, 1, getColor())).getItemStack();
             itemStack.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
@@ -198,6 +245,6 @@ public class SlitherPlayer {
         }
         this.color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
         this.getFollowingArmorStands().clear();
-        Manager.openMenu(this.getPlayer());
+        Manager.openMenu(getPlayer());
     }
 }
