@@ -156,7 +156,7 @@ public class SlitherPlayer {
         }
     }
     public void eatSmallFood() {
-        addPlayerScore(20);
+        addPlayerScore(5);
         smallFoods++;
         if (smallFoods % 7 == 0) {
             addFollowingArmorStand();
@@ -164,7 +164,7 @@ public class SlitherPlayer {
     }
 
     public void eatLargeFood() {
-        addPlayerScore(50);
+        addPlayerScore(15);
         largeFoods++;
         if (largeFoods % 3 == 0) {
             addFollowingArmorStand();
@@ -173,7 +173,6 @@ public class SlitherPlayer {
 
     public void spawnSnake() {  
         isAlive = true;
-        playerScore = 0;
         playerSize = 1;
         smallFoods = 0;
         largeFoods = 0;

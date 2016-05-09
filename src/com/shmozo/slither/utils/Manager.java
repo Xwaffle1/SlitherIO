@@ -58,14 +58,14 @@ public class Manager {
                     if (player.isSneaking()) {
                         if (sPlayer.getPlayerScore() > 25) {
                             sPlayer.boost();
-                            player.setVelocity(player.getLocation().getDirection().multiply(.5));
+                            player.setVelocity(player.getLocation().getDirection().multiply(.7));
                         } else {
                             sPlayer.disableBoostColors();
-                            player.setVelocity(player.getLocation().getDirection().multiply(.3));
+                            player.setVelocity(player.getLocation().getDirection().multiply(.4));
                         }
                     } else {
                         sPlayer.disableBoostColors();
-                        player.setVelocity(player.getLocation().getDirection().multiply(.3));
+                        player.setVelocity(player.getLocation().getDirection().multiply(.4));
                     }
                 }
             }
