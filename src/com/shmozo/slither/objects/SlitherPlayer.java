@@ -2,6 +2,7 @@ package com.shmozo.slither.objects;
 
 import com.shmozo.slither.SlitherIO;
 import com.shmozo.slither.utils.BaseUtils;
+import com.shmozo.slither.utils.Manager;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -131,7 +132,6 @@ public class SlitherPlayer {
         armorStand.setVisible(false);
         armorStand.setBasePlate(false);
         armorStand.setHeadPose(new EulerAngle(3.14, 3.14, 3.14));
-        armorStand.setMarker(true);
         getFollowingArmorStands().add(armorStand);
         /**
          *  SNAKE HEAD
@@ -141,7 +141,6 @@ public class SlitherPlayer {
         armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
         armorStand.setVisible(false);
         armorStand.setSmall(true);
-        armorStand.setMarker(true);
         armorStand.setBasePlate(false);
         armorStand.setHeadPose(new EulerAngle(3.14, 3.14, 3.14));
         getFollowingArmorStands().add(armorStand);
@@ -199,5 +198,6 @@ public class SlitherPlayer {
         }
         this.color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
         this.getFollowingArmorStands().clear();
+        Manager.openMenu(this.getPlayer());
     }
 }
