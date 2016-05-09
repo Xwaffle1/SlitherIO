@@ -4,6 +4,7 @@ import com.shmozo.slither.listeners.PlayerListener;
 import com.shmozo.slither.objects.SlitherPlayer;
 import com.shmozo.slither.utils.Manager;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -20,6 +21,7 @@ public class SlitherIO extends JavaPlugin {
     private static Random random = new Random();
 
     private Map<String, SlitherPlayer> slitherPlayers = new HashMap<>();
+    private Map<String, ArmorStand> heads = new HashMap<>();
 
     public void onEnable() {
         instance = this;
@@ -28,18 +30,18 @@ public class SlitherIO extends JavaPlugin {
 
         Manager.updatePlayerScoreboards();
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getOnlinePlayers().stream().forEach(player -> {
-            SlitherPlayer sPlayer = SlitherIO.getInstance().getSlitherPlayers().get(player.getName());
-            if (sPlayer.isAlive()) {
-                if (player.isOnGround()) {
-                    if (player.isSneaking()) {
-                        player.setVelocity(player.getLocation().getDirection().multiply(.5));
-                    } else {
-                        player.setVelocity(player.getLocation().getDirection().multiply(.3));
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> slitherPlayers.values().stream().forEach(sPlayer -> {
+                if (sPlayer.isAlive()) {
+                    if (sPlayer.getPlayer().isOnGround()) {
+                        if (sPlayer.getPlayer().isSneaking()) {
+                            sPlayer.getPlayer().setVelocity(sPlayer.getPlayer().getLocation().getDirection().multiply(.5));
+                        } else {
+                            sPlayer.getPlayer().setVelocity(sPlayer.getPlayer().getLocation().getDirection().multiply(.3));
+                        }
                     }
                 }
-            }
         }), 0, 1);
+
     }
 
     public void onDisable() {

@@ -2,6 +2,7 @@ package com.shmozo.slither.objects;
 
 import com.shmozo.slither.SlitherIO;
 import com.shmozo.slither.utils.BaseUtils;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
@@ -111,13 +112,31 @@ public class SlitherPlayer {
         playerScore -= amount;
     }
 
-    public void spawnSnake() {
+    public void spawnSnake() {  
         isAlive = true;
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 2));
-        ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getPlayer()), EntityType.ARMOR_STAND);
+
+        /**
+         *  SNAKE HEAD
+         */
+        Location loc = player.getLocation().clone();
+        loc.setY(player.getEyeLocation().getY());
+        ArmorStand armorStand = (ArmorStand) getWorld().spawnEntity(loc, EntityType.ARMOR_STAND);
+        armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
+        armorStand.setVisible(false);
+        armorStand.setBasePlate(false);
+        armorStand.setHeadPose(new EulerAngle(3.14, 3.14, 3.14));
+        armorStand.setMarker(true);
+        getFollowingArmorStands().add(armorStand);
+        /**
+         *  SNAKE HEAD
+         */
+
+        armorStand = (ArmorStand) getWorld().spawnEntity(BaseUtils.getBlockBehindEntity(getPlayer()), EntityType.ARMOR_STAND);
         armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
         armorStand.setVisible(false);
         armorStand.setSmall(true);
+        armorStand.setMarker(true);
         armorStand.setBasePlate(false);
         armorStand.setHeadPose(new EulerAngle(3.14, 3.14, 3.14));
         getFollowingArmorStands().add(armorStand);
