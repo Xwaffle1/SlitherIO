@@ -54,7 +54,7 @@ public class PlayerListener implements Listener {
         if (event.getPlayer().getGameMode() != GameMode.ADVENTURE) return;
         if (!SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).isAlive()) return;
         if (event.getPlayer().getNearbyEntities(0.5, 0.5, 0.5).stream().anyMatch(ArmorStand.class::isInstance)) {
-            ArmorStand stand = (ArmorStand) event.getPlayer().getNearbyEntities(0.5, 0.5, 0.5).stream().filter(e -> e instanceof ArmorStand).findFirst().get();
+            ArmorStand stand = (ArmorStand) event.getPlayer().getNearbyEntities(0.75, 0.75, 0.75).stream().filter(e -> e instanceof ArmorStand).findFirst().get();
             if (!SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).getFollowingArmorStands().contains(stand)) {
                 //Player has collided with another player's tail and should be killed.
                 SlitherIO.getInstance().getSlitherPlayers().get(event.getPlayer().getName()).killPlayer();
@@ -71,11 +71,13 @@ public class PlayerListener implements Listener {
         for (int i = (sPlayer.getFollowingArmorStands().size() - 1); i >= 0; i--) {
             ArmorStand stand = sPlayer.getFollowingArmorStands().get(i);
             if (i == 0) {
-                stand.teleport(event.getTo().clone().subtract(0, 0.5, 0));
+                Location newLoc = event.getTo().clone();
+                newLoc.setY(sPlayer.getHeadY());
+                stand.teleport(newLoc);
             } else {
-                Location loc = sPlayer.getFollowingArmorStands().get((i - 1)).getLocation().clone();
-                loc.setY(event.getPlayer().getLocation().getY());
-                stand.teleport(loc);
+                Location newLoc = sPlayer.getFollowingArmorStands().get((i - 1)).getLocation();
+                newLoc.setY(sPlayer.getBodyY());
+                stand.teleport(newLoc);
             }
         }
     }

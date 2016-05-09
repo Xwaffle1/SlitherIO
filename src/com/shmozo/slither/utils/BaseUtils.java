@@ -4,7 +4,6 @@ import com.shmozo.slither.SlitherIO;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -33,9 +32,9 @@ public class BaseUtils {
         return itemStack;
     }
 
-    public static Location getBlockBehindEntity(Entity entity) {
-        Vector inverseDirectionVec = entity.getLocation().getDirection().multiply(-1);
-        return entity.getLocation().add(inverseDirectionVec);
+    public static Location getBlockBehindLocation(Location location) {
+        Vector inverseDirectionVec = location.getDirection().multiply(-1);
+        return location.add(inverseDirectionVec);
     }
 
     public static void sendActionBar(Player player, String message) {

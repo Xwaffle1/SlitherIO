@@ -73,7 +73,7 @@ public class Manager {
     }
 
     public static void openMenu(Player player){
-        Inventory inv = Bukkit.createInventory(null, 9, "Restart?");
+        Inventory inv = Bukkit.createInventory(null, 9, "Menu");
         inv.setItem(3, new ItemBuilder().setItem(Material.STAINED_GLASS_PANE, DyeColor.LIME.getDyeData(), "Yes", new String[]{}).build());
         inv.setItem(5, new ItemBuilder().setItem(Material.STAINED_GLASS_PANE, DyeColor.RED.getDyeData(), "No", new String[]{}).build());
         player.openInventory(inv);

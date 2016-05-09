@@ -1,9 +1,6 @@
 package com.shmozo.slither.listeners;
 
 import com.shmozo.slither.SlitherIO;
-import com.shmozo.slither.utils.Manager;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -16,11 +13,11 @@ public class InventoryListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getInventory().getTitle().equalsIgnoreCase("Restart?")) {
+        if (event.getInventory().getTitle().equalsIgnoreCase("Menu")) {
             event.setCancelled(true);
-            Player p = (Player) event.getWhoClicked();
             if (event.getRawSlot() == 3) {
-                Manager.loginTasks(p);
+                SlitherIO.getInstance().getSlitherPlayers().get(event.getWhoClicked().getName()).spawnSnake();
+                event.getWhoClicked().closeInventory();
             } else if (event.getRawSlot() == 5) {
                 event.getWhoClicked().closeInventory();
             }
