@@ -73,6 +73,7 @@ public class SlitherPlayer {
         this.largeFoods = 0;
         this.boostCount = 0;
         this.boostColors = false;
+        SlitherIO.getInstance().getSlitherList().add(this);
         spawnSnake();
     }
 

@@ -7,9 +7,7 @@ import com.shmozo.slither.utils.Manager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by Kieran Quigley (Proxying) on 01-May-16 for CherryIO.
@@ -22,6 +20,8 @@ public class SlitherIO extends JavaPlugin {
 
     private Map<String, SlitherPlayer> slitherPlayers = new HashMap<>();
 
+    private List<SlitherPlayer> slitherList = new ArrayList<>();
+
     String nmsVers;
 
     public void onEnable() {
@@ -30,7 +30,9 @@ public class SlitherIO extends JavaPlugin {
         nmsVers = nmsVers.substring(nmsVers.lastIndexOf(".") + 1);
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
-        Manager.updatePlayerScoreboards();
+        Manager.updateTopPlayerList();
+        Manager.updateScoreboards();
+        Manager.updateActionBars();
         Manager.handlePlayerMovement();
     }
 
@@ -51,4 +53,8 @@ public class SlitherIO extends JavaPlugin {
     }
 
     public String getNmsVers(){ return nmsVers; }
+
+    public List<SlitherPlayer> getSlitherList() {
+        return slitherList;
+    }
 }

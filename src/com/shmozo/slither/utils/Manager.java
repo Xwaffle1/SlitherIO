@@ -9,45 +9,61 @@ import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.*;
+
+import java.util.Collections;
 
 /**
  * Created by Kieran Quigley (Proxying) on 01-May-16 for CherryIO.
  */
 public class Manager {
 
-    private static ScoreboardManager manager;
-
-    public static void updatePlayerScoreboards() {
-        manager = Bukkit.getScoreboardManager();
+    public static void updateActionBars() {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(SlitherIO.getInstance(), () -> Bukkit.getOnlinePlayers().stream().forEach(player -> {
             SlitherPlayer sPlayer = SlitherIO.getInstance().getSlitherPlayers().get(player.getName());
-            Scoreboard scoreboard;
-            Objective objective;
             if (sPlayer.isAlive()) {
                 BaseUtils.sendActionBar(player, ChatColor.AQUA + "Score" + ChatColor.GRAY + ": " + ChatColor.GREEN + sPlayer.getPlayerScore()
                         + ChatColor.GRAY + " || " + ChatColor.AQUA + "Size" + ChatColor.GRAY + ": " + ChatColor.GREEN + sPlayer.getPlayerSize());
             } else {
                 BaseUtils.sendActionBar(player, ChatColor.RED + "Dead");
             }
-            if (sPlayer.getScoreboard() != null) {
-                scoreboard = SlitherIO.getInstance().getSlitherPlayers().get(player.getName()).getScoreboard();
-                objective = scoreboard.getObjective("SlitherBoard");
-            } else {
-                scoreboard = manager.getNewScoreboard();
-                objective = scoreboard.registerNewObjective("SlitherBoard", "SlitherBoard");
-                objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-                objective.setDisplayName(ChatColor.AQUA + "Leaders");
-                sPlayer.setScoreboard(scoreboard);
-            }
-            //TODO: Loop through all SlitherPlayers, sort by getScore then display top 5-10?
-
-            player.setScoreboard(scoreboard);
-
         }), 0L, 1L);
+    }
+
+    public static void updateScoreboards() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(SlitherIO.getInstance(), () -> {
+            ScoreboardManager manager = Bukkit.getScoreboardManager();
+            Bukkit.getOnlinePlayers().stream().forEach(player -> {
+                SlitherPlayer sPlayer = SlitherIO.getInstance().getSlitherPlayers().get(player.getName());
+                Scoreboard scoreboard;
+                Objective objective;
+                if (sPlayer.getScoreboard() != null) {
+                    scoreboard = SlitherIO.getInstance().getSlitherPlayers().get(player.getName()).getScoreboard();
+                    objective = scoreboard.getObjective("SlitherBoard");
+                } else {
+                    scoreboard = manager.getNewScoreboard();
+                    objective = scoreboard.registerNewObjective("SlitherBoard", "SlitherBoard");
+                    objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+                    sPlayer.setScoreboard(scoreboard);
+                }
+                objective.setDisplayName(ChatColor.AQUA + "Leaders");
+                int max = 5;
+                if (SlitherIO.getInstance().getSlitherList().size() < 5) {
+                    max = SlitherIO.getInstance().getSlitherList().size();
+                }
+                scoreboard.getEntries().forEach(scoreboard::resetScores);
+                for (int i = 0; i < max; i++) {
+                    if (SlitherIO.getInstance().getSlitherList().get(i).isAlive()) {
+                        objective.getScore(SlitherIO.getInstance().getSlitherList().get(i).getPlayerName()).setScore(SlitherIO.getInstance().getSlitherList().get(i).getPlayerScore());
+                    }
+                }
+                player.setScoreboard(scoreboard);
+            });
+        }, 0L, 15L);
+    }
+
+    public static void updateTopPlayerList() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(SlitherIO.getInstance(), () -> Collections.sort(SlitherIO.getInstance().getSlitherList(), (SlitherPlayer sP1, SlitherPlayer sP2) -> sP1.getPlayerScore() - sP2.getPlayerScore()), 0L, 20L);
     }
 
     public static void handlePlayerMovement() {
@@ -84,7 +100,9 @@ public class Manager {
     }
 
     public static void logoutTasks(Player player) {
-        SlitherIO.getInstance().getSlitherPlayers().get(player.getName()).getFollowingArmorStands().stream().forEach(ArmorStand::remove);
+        SlitherPlayer sP = SlitherIO.getInstance().getSlitherPlayers().get(player.getName());
+        sP.getFollowingArmorStands().stream().forEach(ArmorStand::remove);
+        SlitherIO.getInstance().getSlitherList().remove(sP);
         SlitherIO.getInstance().getSlitherPlayers().remove(player.getName());
     }
 }

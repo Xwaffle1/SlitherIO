@@ -13,7 +13,7 @@ public class InventoryListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getInventory().getTitle().equalsIgnoreCase("Menu")) {
+        if (event.getInventory().getTitle().equals("Menu")) {
             event.setCancelled(true);
             if (event.getRawSlot() == 3) {
                 event.getWhoClicked().teleport(event.getWhoClicked().getWorld().getSpawnLocation());
