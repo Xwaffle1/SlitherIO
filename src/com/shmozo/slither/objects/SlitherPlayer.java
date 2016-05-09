@@ -168,7 +168,7 @@ public class SlitherPlayer {
          */
         Location loc = player.getLocation().clone();
         loc.setY(player.getEyeLocation().getY());
-        ArmorStand headStand = getWorld().spawn(BaseUtils.getBlockBehindEntity(getPlayer()), ArmorStand.class);
+        ArmorStand headStand = getWorld().spawn(BaseUtils.getBlockBehindEntity(getPlayer()).subtract(0, 0.3, 0), ArmorStand.class);
         headStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
         headStand.setVisible(false);
         headStand.setBasePlate(false);
@@ -179,12 +179,12 @@ public class SlitherPlayer {
          *  SNAKE HEAD
          */
 
-        ArmorStand armorStand = getWorld().spawn(BaseUtils.getBlockBehindEntity(getPlayer()), ArmorStand.class);
+        ArmorStand armorStand = getWorld().spawn(BaseUtils.getBlockBehindEntity(getPlayer()).subtract(0, 0.3, 0), ArmorStand.class);
         armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
         armorStand.setVisible(false);
         armorStand.setSmall(true);
-        armorStand.setMarker(true);
         armorStand.setBasePlate(false);
+        armorStand.setGravity(false);
         armorStand.setHeadPose(new EulerAngle(3.14, 3.14, 3.14));
         getFollowingArmorStands().add(armorStand);
         addFollowingArmorStand();
@@ -205,11 +205,12 @@ public class SlitherPlayer {
 
     public void addFollowingArmorStand() {
         if (!getFollowingArmorStands().isEmpty()) {
-            ArmorStand armorStand = getWorld().spawn(BaseUtils.getBlockBehindEntity(getFollowingArmorStands().get(getFollowingArmorStands().size() - 1)), ArmorStand.class);
+            ArmorStand armorStand = getWorld().spawn(BaseUtils.getBlockBehindEntity(getFollowingArmorStands().get(getFollowingArmorStands().size() - 1)).subtract(0, 0.3, 0), ArmorStand.class);
             armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
             armorStand.setVisible(false);
             armorStand.setSmall(true);
             armorStand.setBasePlate(false);
+            armorStand.setGravity(false);
             armorStand.setHeadPose(new EulerAngle(3.14, 3.14, 3.14));
             getFollowingArmorStands().add(armorStand);
             addPlayerSize(1);
