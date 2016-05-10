@@ -1,6 +1,7 @@
 package com.shmozo.slither.utils;
 
 import com.shmozo.slither.SlitherIO;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -64,6 +65,64 @@ public class BaseUtils {
             m5.invoke(pc, ppoc);
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public static short getRandomColor() {
+        switch (SlitherIO.getInstance().getRandom().nextInt(10)) {
+            case 0:
+                return 0;
+            case 1:
+                return 1;
+            case 2:
+                return 6;
+            case 3:
+                return 3;
+            case 4:
+                return 4;
+            case 5:
+                return 5;
+            case 6:
+                return 7;
+            case 7:
+                return 10;
+            case 8:
+                return 11;
+            case 9:
+                return 14;
+            case 10:
+                return 13;
+            default:
+                return 5;
+        }
+    }
+
+    public static ChatColor getChatColor(short color) {
+        switch (color) {
+            case 0:
+                return ChatColor.WHITE;
+            case 1:
+                return ChatColor.GOLD;
+            case 3:
+                return ChatColor.AQUA;
+            case 4:
+                return ChatColor.YELLOW;
+            case 5:
+                return ChatColor.GREEN;
+            case 6:
+                return ChatColor.LIGHT_PURPLE;
+            case 7:
+                return ChatColor.GRAY;
+            case 10:
+                return ChatColor.DARK_PURPLE;
+            case 11:
+                return ChatColor.BLUE;
+            case 13:
+                return ChatColor.DARK_GREEN;
+            case 14:
+                return ChatColor.RED;
+            default:
+                return ChatColor.WHITE;
         }
     }
 }

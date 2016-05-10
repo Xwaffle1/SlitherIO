@@ -27,7 +27,7 @@ public class Manager {
             } else {
                 BaseUtils.sendActionBar(player, ChatColor.RED + "Dead");
             }
-        }), 0L, 1L);
+        }), 0L, 3L);
     }
 
     public static void updateScoreboards() {
@@ -44,17 +44,20 @@ public class Manager {
                     scoreboard = manager.getNewScoreboard();
                     objective = scoreboard.registerNewObjective("SlitherBoard", "SlitherBoard");
                     objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+                    objective.getScore("    ").setScore(1);
+                    objective.getScore(ChatColor.DARK_RED + "www.shmozo.com").setScore(0);
                     sPlayer.setScoreboard(scoreboard);
                 }
-                objective.setDisplayName(ChatColor.AQUA + "Leaders");
+                objective.setDisplayName(ChatColor.DARK_RED + "Leaders");
                 int max = 5;
                 if (SlitherIO.getInstance().getSlitherList().size() < 5) {
                     max = SlitherIO.getInstance().getSlitherList().size();
                 }
-                scoreboard.getEntries().forEach(scoreboard::resetScores);
+                scoreboard.getEntries().stream().filter(entry -> !ChatColor.stripColor(entry).equals("www.shmozo.com") && !entry.equals("    ")).forEach(scoreboard::resetScores);
                 for (int i = 0; i < max; i++) {
-                    if (SlitherIO.getInstance().getSlitherList().get(i).isAlive()) {
-                        objective.getScore(SlitherIO.getInstance().getSlitherList().get(i).getPlayerName()).setScore(SlitherIO.getInstance().getSlitherList().get(i).getPlayerScore());
+                    SlitherPlayer sP = SlitherIO.getInstance().getSlitherList().get(i);
+                    if (sP.isAlive() && sP.getPlayerScore() > 10) {
+                        objective.getScore(sP.getChatColor() + sP.getPlayerName()).setScore(sP.getPlayerScore());
                     }
                 }
                 player.setScoreboard(scoreboard);
@@ -74,14 +77,14 @@ public class Manager {
                     if (player.isSneaking()) {
                         if (sPlayer.getPlayerScore() > 25) {
                             sPlayer.boost();
-                            player.setVelocity(player.getLocation().getDirection().multiply(.7));
+                            player.setVelocity(player.getLocation().getDirection().multiply(.65));
                         } else {
                             sPlayer.disableBoostColors();
-                            player.setVelocity(player.getLocation().getDirection().multiply(.4));
+                            player.setVelocity(player.getLocation().getDirection().multiply(.35));
                         }
                     } else {
                         sPlayer.disableBoostColors();
-                        player.setVelocity(player.getLocation().getDirection().multiply(.4));
+                        player.setVelocity(player.getLocation().getDirection().multiply(.35));
                     }
                 }
             }

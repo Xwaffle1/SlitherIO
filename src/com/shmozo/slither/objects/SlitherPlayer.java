@@ -3,6 +3,7 @@ package com.shmozo.slither.objects;
 import com.shmozo.slither.SlitherIO;
 import com.shmozo.slither.utils.BaseUtils;
 import com.shmozo.slither.utils.Manager;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -30,7 +31,7 @@ public class SlitherPlayer {
     private int playerSize;
     private List<ArmorStand> followingArmorStands;
     private Scoreboard scoreboard;
-    private byte color;
+    private short color;
     private World world;
     private Player player;
     private int smallFoods;
@@ -38,26 +39,24 @@ public class SlitherPlayer {
     private int boostCount;
     private boolean boostColors;
     private double headY;
-
-    public double getBodyY() {
-        return bodyY;
-    }
-
-    public double getHeadY() {
-        return headY;
-    }
-
+    private ChatColor chatColor;
     private double bodyY;
-
-    public boolean isAlive() {
-        return isAlive;
-    }
-
-    public void setAlive(boolean alive) {
-        isAlive = alive;
-    }
-
     private boolean isAlive;
+
+    /* To be stored in SQL. (So we can add them and say total size, highest size etc)
+    uuid,
+    name,
+    totalScore,
+    totalSize,
+    totalSmallFoods,
+    totalLargeFoods,
+    totalBoostTime,
+    highestScore,
+    highestSize,
+    highestSmallFoods,
+    highestLargeFoods,
+    highestBoostTime
+     */
 
     public SlitherPlayer(Player player) {
         this.uuid = player.getUniqueId();
@@ -66,7 +65,8 @@ public class SlitherPlayer {
         this.playerSize = 1;
         this.followingArmorStands = new ArrayList<>();
         this.scoreboard = null;
-        this.color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
+        this.color = BaseUtils.getRandomColor();
+        this.chatColor = BaseUtils.getChatColor(getColor());
         this.world = player.getWorld();
         this.player = player;
         this.smallFoods = 0;
@@ -101,7 +101,7 @@ public class SlitherPlayer {
         return scoreboard;
     }
 
-    public byte getColor() {
+    public short getColor() {
         return color;
     }
 
@@ -127,6 +127,26 @@ public class SlitherPlayer {
 
     public void removePlayerScore(int amount) {
         playerScore -= amount;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+
+    public ChatColor getChatColor() {
+        return chatColor;
+    }
+
+    public double getBodyY() {
+        return bodyY;
+    }
+
+    public double getHeadY() {
+        return headY;
     }
 
     public void boost() {
@@ -186,7 +206,7 @@ public class SlitherPlayer {
         /**
          *  SNAKE HEAD
          */
-        ArmorStand headStand = getWorld().spawn(BaseUtils.getBlockBehindLocation(getPlayer().getEyeLocation().subtract(0, 1.5, 0)), ArmorStand.class);
+        ArmorStand headStand = getWorld().spawn(BaseUtils.getBlockBehindLocation(getPlayer().getEyeLocation().subtract(0, 2.4, 0)), ArmorStand.class);
         headStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
         headStand.setVisible(false);
         headStand.setBasePlate(false);
@@ -198,7 +218,7 @@ public class SlitherPlayer {
          *  SNAKE HEAD
          */
 
-        ArmorStand armorStand = getWorld().spawn(BaseUtils.getBlockBehindLocation(getPlayer().getEyeLocation().subtract(0, 1, 0)), ArmorStand.class);
+        ArmorStand armorStand = getWorld().spawn(BaseUtils.getBlockBehindLocation(getPlayer().getEyeLocation().subtract(0, 2, 0)), ArmorStand.class);
         armorStand.setHelmet(new ItemStack(Material.STAINED_CLAY, 1, getColor()));
         armorStand.setVisible(false);
         armorStand.setSmall(true);
@@ -266,7 +286,8 @@ public class SlitherPlayer {
             itemStack.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 1);
             armorStand.remove();
         }
-        this.color = (byte) SlitherIO.getInstance().getRandom().nextInt(15);
+        this.color = BaseUtils.getRandomColor();
+        this.chatColor = BaseUtils.getChatColor(getColor());
         this.getFollowingArmorStands().clear();
         Manager.openMenu(getPlayer());
     }
